@@ -9,11 +9,17 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name_plural = "Categories"
+
 
 class Seller(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     contact = models.CharField(max_length=500)
+
+    def __str__(self):
+        return f'{self.name} - {self.contact}'
 
 
 class Discount(models.Model):
@@ -22,6 +28,9 @@ class Discount(models.Model):
     date_start = models.DateField()
     date_end = models.DateField()
 
+    def __str__(self):
+        return f'{self.name} {self.percent}%, {self.date_start} - {self.date_end}'
+
 
 class Promo(models.Model):
     name = models.CharField(max_length=100)
@@ -29,6 +38,9 @@ class Promo(models.Model):
     date_start = models.DateField()
     date_end = models.DateField()
     is_cumulative = models.BooleanField()
+
+    def __str__(self):
+        return f'{self.name} {self.percent}%, {self.date_start} - {self.date_end}'
 
 
 class Product(models.Model):
@@ -42,10 +54,16 @@ class Product(models.Model):
     category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'{self.seller} {self.name}, {self.article}, {self.count_on_stock}, {self.price}, {self.category}'
+
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='product_images/')
+
+    def __str__(self):
+        return f'Image {self.image} for {self.product}'
 
 
 class Cart(models.Model):
@@ -102,6 +120,9 @@ class Order(models.Model):
 
     delivery_notification_due_to = models.PositiveIntegerField(choices=NOTIFICATION, default=6)
 
+    def __str__(self):
+        return f'{self.user} {self.id} {self.status} {self.delivery_methods} {self.payment_method} {self.payment_status}'
+
 
 class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
@@ -112,3 +133,6 @@ class OrderProduct(models.Model):
 class Cashback(models.Model):
     percent = models.PositiveIntegerField()
     threshold = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f'{self.percent}% {self.threshold}'
