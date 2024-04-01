@@ -1,4 +1,4 @@
-from catalog.models import Category, Product, Seller, Discount
+from catalog.models import Category, Product, Seller
 from rest_framework.generics import ListAPIView
 from catalog.serializers import CategorySerializer, ProductSerializer, SellerSerializer, DiscountSerializer
 from rest_framework.permissions import AllowAny
